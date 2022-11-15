@@ -10,5 +10,6 @@
   - in case we need to look back to find bugs, so we can search commits
 - Use merge request to merge your branch to **main**, and send the request  in group chat to let others know the update and check bugs
   - merge should be done after checking
+- use meaningful variable names, regardless of the length.
 - update .gitignore file to ignore changes
 

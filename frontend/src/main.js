@@ -6,6 +6,7 @@ import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
+import iFrameResize from 'iframe-resizer/js/iframeResizer'
 
 // collapse 展开折叠
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
@@ -14,6 +15,12 @@ import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
+
+Vue.directive('resize', {
+  bind: function(el, { value = {} }) {
+    el.addEventListener('load', () => iFrameResize(value, el))
+  }
+})
 
 new Vue({
   router,

@@ -4,8 +4,8 @@
 </template>
 
 <script>
-import echarts from 'echarts'   //npm install echarts@4.9.0
 export default {
+  name: 'Linegraph',
   data() {
     return {
       option: {

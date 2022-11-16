@@ -82,8 +82,8 @@ export default {
       return {
         value: [0, 100],
         marks: {
-          0: '1880',
-          25: '1890',
+          0: '1980',
+          25: '1990',
           50: {
             style: {
               color: '#1989FA'

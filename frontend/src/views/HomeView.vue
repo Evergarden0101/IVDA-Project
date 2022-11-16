@@ -61,8 +61,23 @@
           </el-col>
         </el-row>
 
-        <!-- <el-row style="height: 5550px;"> -->
-          <!-- </el-row> -->
+        <el-row style="height: 740px;">
+
+          <el-col span="12" offset="0">
+            <el-row style="height:380px;">
+              <ScatterPlot/>
+            </el-row>
+            <el-row style="height:300px">
+              <Linegraph/>
+            </el-row>
+          </el-col>
+
+          <el-col span="12">
+            <iframe src="heatmap.html" frameborder="0"
+            onload="this.height=740" width="500px" height="100%"></iframe>
+          </el-col>
+
+        </el-row>
       </el-main>
       <!-- <el-footer>Footer</el-footer> -->
     </el-container>
@@ -71,12 +86,16 @@
 
 <script>
 // @ is an alias to /src
-// import Earth from '@/components/Earth.vue'
+import Linegraph from '@/components/linegraph.vue'
+import ScatterPlot from "@/components/ScatterPlot";
+import LinePlot from "@/components/LinePlot";
 
 export default {
   name: 'HomeView',
   components: {
-    // Earth
+    Linegraph,
+    ScatterPlot, 
+    LinePlot,
   },
   data() {
       return {

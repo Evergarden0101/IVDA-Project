@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-  <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop>
+  <!-- <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop> -->
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <el-container>
@@ -11,6 +11,8 @@
       </el-header>
       <el-main>
         <el-row style="height: 4rem;">
+
+          <!-- timeline -->
           <template>
             <!-- <h4 class="demonstration">Time Selection</h4> -->
             <el-col :span="16" :offset="4">
@@ -23,6 +25,8 @@
               </el-slider>
             </el-col>
           </template>
+          <!-- filter -->
+          <!--
           <template>
             <el-button type="text" @click="dialogFormVisible = true">
               <el-link type="primary">+ Filters</el-link>
@@ -42,27 +46,44 @@
               </div>
             </el-dialog>
           </template>
+          -->
         </el-row>
+
+        <el-row style="height: 540px;">
           <!-- <Earth/> -->
+          <el-col :span="17" :offset ="0">
+            <!-- layer tab -->
+            <el-row>
+              <el-col :span="8" :offset="0">
+                <template>
+                  <el-radio-group v-model="tabPosition" style="transform:scale(0.85)">
+                    <el-radio-button label="tempture">Tempture</el-radio-button>
+                    <el-radio-button label="co2">CO2 Emission</el-radio-button>
+                  </el-radio-group>
+                </template>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <iframe src="interactive_earth.html" frameborder="0"
+              onload="this.height=550" width="100%" height="100%"></iframe>
+            </el-row>
+          </el-col>
+          <!-- heatmap -->
+          <el-col :span="7" :offset="-1">
+            <iframe src="heatmap.html" frameborder="0" 
+            onload="this.height=580" width="420px" height="100%"></iframe>
+          </el-col>
+        </el-row>
+
         <el-row>
-          <el-col span="6" offset="2">
-            <template>
-              <el-radio-group v-model="tabPosition" style="transform:scale(0.75)">
-                <el-radio-button label="tempture">Tempture</el-radio-button>
-                <el-radio-button label="co2">CO2 Emission</el-radio-button>
-              </el-radio-group>
-            </template>
-          </el-col>
-        </el-row>
-        <el-row style="height: 550px;">
-          <el-col span="20" offset ="2">
-            <iframe src="interactive_earth.html" frameborder="0"
-            onload="this.height=550" width="100%" height="100%"></iframe>
-          </el-col>
+          <iframe src="earth.html" frameborder="0"
+              onload="this.height=550" width="100%" height="100%"></iframe>
         </el-row>
 
+
+        <!-- hidden
         <el-row style="height: 740px;">
-
           <el-col span="12" offset="0">
             <el-row style="height:380px;">
               <ScatterPlot/>
@@ -71,13 +92,8 @@
               <Linegraph/>
             </el-row>
           </el-col>
-
-          <el-col span="12">
-            <iframe src="heatmap.html" frameborder="0"
-            onload="this.height=740" width="500px" height="100%"></iframe>
-          </el-col>
-
         </el-row>
+        -->
       </el-main>
       <!-- <el-footer>Footer</el-footer> -->
     </el-container>
@@ -86,16 +102,11 @@
 
 <script>
 // @ is an alias to /src
-import Linegraph from '@/components/linegraph.vue'
-import ScatterPlot from "@/components/ScatterPlot";
-import LinePlot from "@/components/LinePlot";
 
 export default {
   name: 'HomeView',
   components: {
-    Linegraph,
-    ScatterPlot, 
-    LinePlot,
+    // Linegraph,
   },
   data() {
       return {

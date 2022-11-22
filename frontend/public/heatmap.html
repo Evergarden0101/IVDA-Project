@@ -6,7 +6,7 @@
 <script src="https://d3js.org/d3.v4.js"></script>
 
 <!-- Create a div where the graph will take place -->
-<div id="my_dataviz"></div>
+<div id="my_dataviz" style="overflow-x:hidden"></div>
 
 <!-- Load color palettes -->
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
@@ -16,8 +16,8 @@
 
 // set the dimensions and margins of the graph
 var margin = {top: 70, right: 25, bottom: 30, left: 40},
-  width = 450 - margin.left - margin.right,
-  height = 650 - margin.top - margin.bottom;
+  width = 420 - margin.left - margin.right,
+  height = 490 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
@@ -71,6 +71,7 @@ d3.csv("./heatmap_data.csv", function(data) {
     .style("border-width", "2px")
     .style("border-radius", "5px")
     .style("padding", "5px")
+    .style("width", "inherit")
 
   // Three function that change the tooltip when user hover / move / leave a cell
   var mouseover = function(d) {
@@ -82,9 +83,10 @@ d3.csv("./heatmap_data.csv", function(data) {
   }
   var mousemove = function(d) {
     tooltip
-      .html("The exact value of<br>this cell is: " + d.value)
+      .html("The exact temperature of this day is: " + d.value)
       .style("left", (d3.mouse(this)[0]+70) + "px")
       .style("top", (d3.mouse(this)[1]) + "px")
+      .style("text-align", "center")
   }
   var mouseleave = function(d) {
     tooltip
@@ -130,7 +132,7 @@ svg.append("text")
         .style("font-size", "14px")
         .style("fill", "grey")
         .style("max-width", 400)
-        .text("A short description.");
+        .text("A short description on findings...");
 
 
 </script>

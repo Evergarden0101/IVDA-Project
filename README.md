@@ -13,3 +13,93 @@
 - use meaningful variable names, regardless of the length.
 - update .gitignore file to ignore changes
 
+## Front back API
+
+先忽略headers，
+
+#### tempGeoJson
+
+- 地图温度数据-map
+
+- 反geojson
+
+- ```vue
+  method: 'post',
+  url: '/tempGeoJson',
+  headers: {'token': this.$store.state.userInfo.token},
+  data: {
+  	time: [1980,2020] //初始默认40年
+  }
+  ```
+  
+- ```vue
+  if (res.data.code == 1001) {
+    this.tempGeoJson = res.data.data
+  }
+  ```
+
+#### co2GeoJson
+
+- 地图co2数据
+
+- 反geojson
+
+- ```vue
+  method: 'post',
+  url: '/co2GeoJson',
+  headers: {'token': this.$store.state.userInfo.token},
+  data: {
+  	time: [1980,2020] //初始默认40年
+  }
+  ```
+
+- ```vue
+  if (res.data.code == 1001) {
+    this.co2GeoJson = res.data.data
+  }
+  ```
+
+#### monthTemp
+
+- 40年月平均气温-heatmap
+- 反**csv**
+
+- ```vue
+  method: 'post',
+  url: '/monthTemp',
+  headers: {'token': this.$store.state.userInfo.token},
+  data: {
+  	place: ["global", 0] //(["CHN", 1],["上海的id"，2])
+  	// 第一个参数表示国家或者城市名称，名称按后端给的数据来
+  	// 第二个参数0表示全球，1表示国家，2表示城市
+  }
+  ```
+  
+- ```vue
+  if (res.data.code == 1001) {
+    this.glbMonthTemp = res.data.data
+  }
+  ```
+#### selectcountry
+
+- 选择国家显示城市
+
+- 反字典组
+
+  - {long: 2.349, lat: 48.864, popu: 150000000, tempRate:5%}, // *Paris*
+
+- ```vue
+  method: 'post',
+  url: '/selectcountry',
+  headers: {'token': this.$store.state.userInfo.token},
+  data: {
+  	time: [1980, 2020]
+  	country: countryid // 根据后端唯一的名称来给
+  }
+  ```
+
+- ```vue
+  if (res.data.code == 1001) {
+    this.citylist = res.data.data
+  }
+  ```

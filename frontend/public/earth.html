@@ -5,7 +5,7 @@
 	<base target="_top">
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	
+
 	
 	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
 
@@ -75,9 +75,9 @@
 
     // Create data for circles:
     var markers = [
-    {long: 9.083, lat: 42.149}, // corsica
+    {long: 9.083, lat: 42.149, popu: 15000000}, // corsica
     //{long: 7.26, lat: 43.71}, // nice
-    {long: 2.349, lat: 48.864}, // Paris
+    {long: 2.349, lat: 48.864, popu: 150000000, tempRate:5%}, // Paris
     //{long: -1.397, lat: 43.664}, // Hossegor
     //{long: 3.075, lat: 50.640}, // Lille
     //{long: -3.83, lat: 48}, // Morlaix
@@ -92,9 +92,9 @@
     .append("circle")
         .attr("cx", function(d){ return map.latLngToLayerPoint([d.lat, d.long]).x })
         .attr("cy", function(d){ return map.latLngToLayerPoint([d.lat, d.long]).y })
-        .attr("r", 14)
-        .style("fill", "red")
-        .attr("stroke", "red")
+        .attr("r", 14) // circle radius
+        .style("fill", "red") // fill color
+        .attr("stroke", "red") // stroke color
         .attr("stroke-width", 3)
         .attr("fill-opacity", .4)
     

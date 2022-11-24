@@ -21,7 +21,10 @@
 
 - 地图温度数据-map
 
-- 反geojson
+- 反csv
+  - 澳大利亚为例
+  - name	code	tempRate
+    - Australia	AUS	1.5%
 
 - ```vue
   method: 'post',
@@ -34,7 +37,7 @@
   
 - ```vue
   if (res.data.code == 1001) {
-    this.tempGeoJson = res.data.data
+    this.tempRate = res.data.data
   }
   ```
 
@@ -42,7 +45,10 @@
 
 - 地图co2数据
 
-- 反geojson
+- 反csv
+  - 澳大利亚为例
+  - name	code	CO2Rate
+    - Australia	AUS	2.5%
 
 - ```vue
   method: 'post',
@@ -55,7 +61,7 @@
 
 - ```vue
   if (res.data.code == 1001) {
-    this.co2GeoJson = res.data.data
+    this.co2Rate = res.data.data
   }
   ```
 
@@ -63,13 +69,15 @@
 
 - 40年月平均气温-heatmap
 - 反**csv**
+  - Mon	Year	Temp
+  - Jul	1988	20.0
 
 - ```vue
   method: 'post',
   url: '/monthTemp',
   headers: {'token': this.$store.state.userInfo.token},
   data: {
-  	place: ["global", 0] //(["CHN", 1],["上海的id"，2])
+  	place: ["global", 0] // (["CHN", 1],["上海的id"，2])
   	// 第一个参数表示国家或者城市名称，名称按后端给的数据来
   	// 第二个参数0表示全球，1表示国家，2表示城市
   }
@@ -86,7 +94,7 @@
 
 - 反字典组
 
-  - {long: 2.349, lat: 48.864, popu: 150000000, tempRate:5%}, // *Paris*
+  - {long: 2.349, lat: 48.864, popu: 150000000, tempRate:5.1%, co2Rate: 2.5%}, // *Paris*
 
 - ```vue
   method: 'post',

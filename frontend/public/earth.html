@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	
-	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+	<!-- <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" /> -->
 
     <script src="http://d3js.org/d3.v4.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
@@ -23,14 +23,14 @@
 			margin: 0;
 		}
 		.leaflet-container {
-			height: 400px;
+			height: 450px;
 			width: 600px;
 			max-width: 100%;
 			max-height: 100%;
 		}
 	</style>
 
-	<style>#map { width: 800px; height: 500px; }
+	<style>#map { width: 850px; height: 530px; }
     .info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
     .legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }</style>
 </head>
@@ -45,13 +45,14 @@
     var corner2 = L.latLng(90, 180); //设置右下点经纬度 
     var bounds = L.latLngBounds(corner1, corner2); //构建视图限制范围
 	var maxZoom = 4.5;
+
     const map = L.map('map', {
-        minZoom: 1.4,
+        minZoom: 1.49,
         maxZoom: maxZoom,
         dragging: true,
         maxBounds: bounds,
         maxBoundsViscosity: 1
-    }).setView([0, 0], 1);
+    }).setView([40, 0], 1);
     const scaleControl = L.control.scale({maxWidth: 150, imperial: false}).addTo(map);
 
     // temperature
@@ -75,14 +76,14 @@
 
     // create a tooltip
     var Tooltip = d3.select("#map")
-    .append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 1)
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px")
+					.append("div")
+					.attr("class", "tooltip")
+					.style("opacity", 1)
+					.style("background-color", "white")
+					.style("border", "solid")
+					.style("border-width", "2px")
+					.style("border-radius", "5px")
+					.style("padding", "5px")
   
     // Three function that change the tooltip when user hover / move / leave a cell
     var mouseover = function(d) {
@@ -204,47 +205,29 @@
 
 	// Create data for circles:
 	var markers = [
-	{long: 9.083, lat: 42.149, popu: 15000000}, // corsica
-	//{long: 7.26, lat: 43.71}, // nice
-	{long: 2.349, lat: 48.864, popu: 150000000, tempRate:"5%"}, // Paris
-	//{long: -1.397, lat: 43.664}, // Hossegor
-	//{long: 3.075, lat: 50.640}, // Lille
-	//{long: -3.83, lat: 48}, // Morlaix
+	{lng: 7.26, lat: 43.71, popu: 1231}, // nice
+	{lng: 2.349, lat: 48.864, popu: 12312}, // Paris
 	];
-
-	var circle = L.circle([48.864, 2.349], {
-		color: 'red',
-		fillColor: '#f03',
-		fillOpacity: 0.5,
-		radius: 500000
-	}).addTo(map).bindPopup('City Name');
-
-	/* Select the svg area and add circles:
-	d3.select("#map")
-	.select("svg")
-	.selectAll("myCircles")
-	.data(markers)
-	.enter()
-	.append("circle")
-		.attr("cx", function(d){ return map.latLngToLayerPoint([d.lat, d.long]).x })
-		.attr("cy", function(d){ return map.latLngToLayerPoint([d.lat, d.long]).y })
-		.attr("r", 14) // circle radius
-		.style("fill", "red") // fill color
-		.attr("stroke", "red") // stroke color
-		.attr("stroke-width", 3)
-		.attr("fill-opacity", .4)
-	*/
-	
-	// Function that update circle position if something change
-	function update() {
-		d3.selectAll("circle")
-		.attr("cx", function(d){ return map.latLngToLayerPoint([d.lat, d.long]).x })
-		.attr("cy", function(d){ return map.latLngToLayerPoint([d.lat, d.long]).y })
+	for (let i in markers) {
+		city = {}
+		city.lat = markers[i].lat
+		city.lng = markers[i].lng
+		L.circleMarker(city, {
+			color: 'red',
+			fillColor: 'red',
+			fillOpacity: 0.5,
+			radius: 12,
+			zIndexOffset: 9999
+		}).bringToFront().addTo(map).bindPopup('I am a circle.');
 	}
-	
-	// If the user change the map (zoom or drag), I update circle position:
-	map.on("moveend", update)
 
+	var data = "0";
+	window.addEventListener('message', function (messageEvent) {
+	  console.log(messageEvent.data)
+	  data = messageEvent.data;
+	})
+	console.log("----")
+	console.log(data)
 
 </script>
 

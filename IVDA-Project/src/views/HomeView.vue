@@ -50,7 +50,7 @@
           </el-row>
           <el-row style="height: 2rem;"></el-row>
   
-          <el-row style="height: 580px;">
+          <el-row style="height: 80vh;">
             <!-- <Earth/> -->
             <el-col :span="16" :offset ="0">
               <!-- layer tab 
@@ -65,9 +65,8 @@
                 </el-col>
               </el-row>
               -->
-              <el-row style="margin-left:25px">
-                <iframe src="/static/earth.html" frameborder="0" ref="earthfrm" @load="sendEarth"
-                onload="this.height=580" width="100%" height="100%"></iframe>
+              <el-row style="margin-left:25px; ">
+                <earth></earth>
               </el-row>
             </el-col>
             <!-- heatmap -->
@@ -81,6 +80,11 @@
             <iframe src="/static/interactive_earth.html" frameborder="0"
                 onload="this.height=550" width="100%" height="100%"></iframe>
           </el-row>
+
+        <el-row style="margin-left:25px">
+            <iframe src="/static/earth.html" frameborder="0" ref="earthfrm" @load="sendEarth"
+            onload="this.height=580" width="100%" height="100%"></iframe>
+        </el-row>
   
           <!-- hidden
           <el-row style="height: 740px;">
@@ -102,11 +106,11 @@
   
   <script>
   // @ is an alias to /src
-  
+  import Earth from '../components/earth.vue'
   export default {
     name: 'HomeView',
     components: {
-      // Linegraph,
+      Earth,
     },
     data() {
         return {
@@ -143,54 +147,63 @@
         }
     },
     beforeMount() {
-      this.getTemp(1980, 2020)
+        // this.getTemp(1980, 2020);
+        // this.getTempTest(1980, 2020);
     },
     mounted() {
-      this.$nextTick(function() {
-        this.iearth = this.$refs["earthfrm"].contentWindow;
-        window.addEventListener("message", this.sendEarth);
-        this.iheatmp = this.$refs["heatmpfrm"].contentWindow;
-        window.addEventListener("message", this.sendHeatmp);
-      })
+        this.$nextTick(function() {
+            this.iearth = this.$refs["earthfrm"].contentWindow;
+            window.addEventListener("message", this.sendEarth);
+            this.iheatmp = this.$refs["heatmpfrm"].contentWindow;
+            window.addEventListener("message", this.sendHeatmp);
+        })
     },
     destroyed() {
-      window.removeEventListener("message", this.sendEarth);
-      window.removeEventListener("message", this.sendHeatmp);
+        window.removeEventListener("message", this.sendEarth);
+        window.removeEventListener("message", this.sendHeatmp);
     },
     methods: {
-      getTemp(startY, endY) {
-          this.axios({
-            method: 'post',
-            url: '/tempGeoJson',
-            headers: {'token': this.$store.state.userInfo.token},
-            data: {
-              time: [startY, endY]
-            }
-          }).then(res => {
-            this.temp = res.data
-            console.log(this.temp.tempRate)
-  
-            // if (res.data.code == 1001) {
-            // } 
-            // else {
-            //   this.$message({
-            //     showClose: true,
-            //     type: 'error',
-            //     message: "Error on getting Temperature Data"
-            //   })
-            // }
-          })
-      },
-      sendEarth(){
-        this.iearth.postMessage({
-          data: "1"
-        },'*');
-      },
-      sendHeatmp(){
-        this.iheatmp.postMessage({
-          data: "1"
-        },'*');
-      },
+        getTemp(startY, endY) {
+            console.log("getTemp");
+            this.axios({
+                method: 'post',
+                url: '/tempGeoJson/',
+                // headers: {'token': this.$store.state.userInfo.token},
+                data: {
+                    time: [startY, endY]
+                },
+            }).then(res => {
+                this.temp = res.data
+                console.log("res")
+                console.log(this.temp[0].name)
+                // if (res.data.code == 1001) {
+                // } 
+                // else {
+                //   this.$message({
+                //     showClose: true,
+                //     type: 'error',
+                //     message: "Error on getting Temperature Data"
+                //   })
+                // }
+            })
+        },
+        /*
+        getTempTest(startY, endY){
+            console.log("getTempTest", startY, endY);
+            this.temp = this.tempGeoJson
+            console.log(this.temp[0].name)
+        },
+        */
+        sendEarth(){
+            this.iearth.postMessage({
+                data: this.temp
+            },'*');
+        },
+        sendHeatmp(){
+            this.iheatmp.postMessage({
+            data: "1"
+            },'*');
+        },
   
     },
   }

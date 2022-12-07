@@ -48,11 +48,12 @@
           </template>
           -->
         </el-row>
+        <el-row style="height: 2rem;"></el-row>
 
-        <el-row style="height: 540px;">
+        <el-row style="height: 580px;">
           <!-- <Earth/> -->
-          <el-col :span="17" :offset ="0">
-            <!-- layer tab -->
+          <el-col :span="16" :offset ="0">
+            <!-- layer tab 
             <el-row>
               <el-col :span="8" :offset="0">
                 <template>
@@ -63,24 +64,23 @@
                 </template>
               </el-col>
             </el-row>
-
-            <el-row>
-              <iframe src="interactive_earth.html" frameborder="0"
-              onload="this.height=550" width="100%" height="100%"></iframe>
+            -->
+            <el-row style="margin-left:25px">
+              <iframe src="earth.html" frameborder="0" ref="earthfrm" @load="sendEarth"
+              onload="this.height=580" width="100%" height="100%"></iframe>
             </el-row>
           </el-col>
           <!-- heatmap -->
-          <el-col :span="7" :offset="-1">
-            <iframe src="heatmap.html" frameborder="0" 
+          <el-col :span="7" :offset="0">
+            <iframe src="heatmap.html" frameborder="0" ref="heatmpfrm" @load="sendHeatmp"
             onload="this.height=580" width="420px" height="100%"></iframe>
           </el-col>
         </el-row>
 
         <el-row>
-          <iframe src="earth.html" frameborder="0"
+          <iframe src="interactive_earth.html" frameborder="0"
               onload="this.height=550" width="100%" height="100%"></iframe>
         </el-row>
-
 
         <!-- hidden
         <el-row style="height: 740px;">
@@ -123,6 +123,10 @@ export default {
           75: '2010',
           100: '2020'
         },
+        iearth:"",
+        iheatmp:"",
+        temp:[],
+
         dialogTableVisible: false,
         dialogFormVisible: false,
         form: {
@@ -136,9 +140,58 @@ export default {
           desc: ''
         },
         formLabelWidth: '120px',
-        earthUrl: "../components/earth.html",
-        tabPosition: 'tempture',
       }
-    }
+  },
+  beforeMount() {
+    this.getTemp(1980, 2020)
+  },
+  mounted() {
+    this.$nextTick(function() {
+      this.iearth = this.$refs["earthfrm"].contentWindow;
+      window.addEventListener("message", this.sendEarth);
+      this.iheatmp = this.$refs["heatmpfrm"].contentWindow;
+      window.addEventListener("message", this.sendHeatmp);
+    })
+  },
+  destroyed() {
+    window.removeEventListener("message", this.sendEarth);
+    window.removeEventListener("message", this.sendHeatmp);
+  },
+  methods: {
+    getTemp(startY, endY) {
+        this.axios({
+          method: 'post',
+          url: '/tempGeoJson',
+          headers: {'token': this.$store.state.userInfo.token},
+          data: {
+            time: [startY, endY]
+          }
+        }).then(res => {
+          this.temp = res.data
+          console.log(this.temp.tempRate)
+
+          // if (res.data.code == 1001) {
+          // } 
+          // else {
+          //   this.$message({
+          //     showClose: true,
+          //     type: 'error',
+          //     message: "Error on getting Temperature Data"
+          //   })
+          // }
+        })
+    },
+    sendEarth(){
+      this.iearth.postMessage({
+        data: "1"
+      },'*');
+    },
+    sendHeatmp(){
+      this.iheatmp.postMessage({
+        data: "1"
+      },'*');
+    },
+
+  },
 }
 </script>

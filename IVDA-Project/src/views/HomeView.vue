@@ -130,6 +130,8 @@
           iearth:"",
           iheatmp:"",
           temp:[],
+          placeSelection: null,
+          scaleSelection: null,
   
           dialogTableVisible: false,
           dialogFormVisible: false,
@@ -147,6 +149,13 @@
         }
     },
     beforeMount() {
+        window.localStorage.setItem('placeSelection', "global");
+        window.localStorage.setItem('scaleSelection', 0);
+
+        this.placeSelection = window.localStorage.getItem('placeSelection');
+        this.scaleSelection = window.localStorage.getItem('scaleSelection');
+        console.log(this.placeSelection);
+        console.log(this.scaleSelection);
         // this.getTemp(1980, 2020);
         // this.getTempTest(1980, 2020);
     },

@@ -14,17 +14,20 @@ import 'leaflet/dist/leaflet.css'
 import router from './router'
 import store from './store'
 import iFrameResize from 'iframe-resizer/js/iframeResizer'
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css'; 
 
 // collapse 展开折叠
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+Vue.config.productionTip = false;
 
 Vue.use(ElementUI, { locale });
 Vue.use(L);
 Vue.use(d3);
 Vue.use(VueAxios, axios);
+Vue.use(Antd);
 axios.defaults.baseURL='/api';
 
-Vue.config.productionTip = false;
 
 Vue.directive('resize', {
   bind: function(el, { value = {} }) {

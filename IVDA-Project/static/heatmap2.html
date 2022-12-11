@@ -29,7 +29,7 @@ var svg = d3.select("#my_dataviz")
         "translate(" + margin.left + "," + margin.top + ")");
 
 //Read the data
-d3.csv("./pd_0.csv", function(data) {
+d3.csv("./pd_2.csv", function(data) {
   console.log(data);
 
   // Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
@@ -88,7 +88,7 @@ d3.csv("./pd_0.csv", function(data) {
   }
   var mousemove = function(d) {
     tooltip
-      .html("The average temperature of this day is: " + d.Temp + "°C")
+      .html("The average temperature of this day is: " + d.Temp+ "°C")
       .style("left", (d3.mouse(this)[0]+70) + "px")
       .style("top", (d3.mouse(this)[1]) + "px")
       .style("text-align", "center")
@@ -127,7 +127,7 @@ svg.append("text")
         .attr("y", -10)
         .attr("text-anchor", "left")
         .style("font-size", "22px")
-        .text("Avg monthly temperature globally");
+        .text("Avg monthly temperature in Milan");
 
 /* Add subtitle to graph
 svg.append("text")

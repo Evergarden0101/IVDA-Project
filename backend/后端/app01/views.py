@@ -1,3 +1,4 @@
+import csv
 import json
 import pycountry as pc
 from django.shortcuts import render,HttpResponse
@@ -19,7 +20,7 @@ def index(request):
 @csrf_exempt
 def tempGeoJson(request):
     try:
-        a = eval(request.GET['data'])
+        a = json.loads(request.body).get("data")
     except:
         a =None
     if a==None:
@@ -80,7 +81,7 @@ def tempGeoJson(request):
 def co2GeoJson(request):
     global shuzhi
     try:
-        a = eval(request.GET['data'])
+        a = json.loads(request.body).get("data")
     except:
         a = None
     if a == None:
@@ -129,11 +130,19 @@ def co2GeoJson(request):
     return JsonResponse(json.loads(df1), safe=False)
 @csrf_exempt
 def monthTemp(request):
-    a = eval(request.GET['data'])
-    pdzhi =a.get('place')[1]
+    a = json.loads(request.body).get("data")
+    # a = eval(request.GET['data'])
+    print(a)
+    pdzhi =int(a.get('place')[1])
     guo = a.get('place')[0]
     if pdzhi == 0:
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['Mon','Year','Temp'])
+        print("1")
         newda = tem.loc[12:, ]
+        newda = newda.copy()
         newda['Unnamed: 0'] = pd.to_datetime(newda['Unnamed: 0'])
         newda_new1 = newda.groupby(by=newda.iloc[:, 0].apply(lambda x: x.year))
         all_data = []
@@ -152,12 +161,19 @@ def monthTemp(request):
                         shuz[str(shuliang)] = pd.to_numeric(shuz[str(shuliang)])
 
                         molist.append(shuz[str(shuliang)].mean())
-                    all_data.append([mo, i, np.mean(molist)])
+                    # all_data.append([mo, i, np.mean(molist)])
+                    writer.writerow([mo, i, np.mean(molist)])
                 except:
                     pass
-        df = pd.DataFrame(all_data,
-                          columns=['Mon', 'Year', 'Temp']).to_json(orient='records')
-        return JsonResponse(json.loads(df), safe=False)
+        print("2")
+        # df = pd.DataFrame(all_data,
+        #                   columns=['Mon', 'Year', 'Temp'])
+        # .to_json(orient='records')
+        # print(df)
+        # response = HttpResponse(df, content_type="text/csv")
+        # response["Content-Disposition"] = "attachment; filename=test.csv"
+        return response
+        # return JsonResponse(json.load(df), safe=False)
     elif pdzhi == 1:#国家
         info = inf.copy()
         info.columns = info.iloc[0]
@@ -230,10 +246,11 @@ def monthTemp(request):
                     pass
         df = pd.DataFrame(all_data,
                           columns=['Mon', 'Year', 'Temp']).to_json(orient='records')
+        print(df)
         return JsonResponse(json.loads(df), safe=False)
 
 def selectcountry(request):
-    a = eval(request.GET['data'])
+    a = json.loads(request.body).get("data")
     print(a)
     # pdzhi =a.get('place')[1]
     if str(a.get('time')) == '[1980,2020]':
@@ -260,6 +277,8 @@ def selectcountry(request):
     digui = 0
     for y in b['index']:
         newda = tem.iloc[:, [0, int(y) + 1]]
+        city = newda.iloc[1, 1]
+        id = newda.iloc[10, 1]
         newda = newda.loc[12:, ]
 
         newda['Unnamed: 0'] = pd.to_datetime(newda['Unnamed: 0'])
@@ -310,7 +329,7 @@ def selectcountry(request):
 
         di_lst.append(
             dict(long=str(b['lng'][digui]), lat=str(b['lat'][digui]), popu=b['population'][digui], tempRate=zuihou,
-                 co2Rate=zuihouco2))
+                 co2Rate=zuihouco2, id=id, name=city))
         digui += 1
     return JsonResponse(di_lst, safe=False)
 # Create your views here.
